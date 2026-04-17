@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'mint': '#E9FFF9',
+                        'dark-bg': '#080B08',
+                        'card-bg': '#121A12',
+                        'accent': '#00FF94',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0B1622; }
+        ::-webkit-scrollbar-thumb { background: #00FF94; border-radius: 10px; }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .skeleton {
+            background: linear-gradient(90deg, #121A12 25%, #1a2a1a 50%, #121A12 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.6s infinite;
+            border-radius: 6px;
+        }
+        .skeleton-card {
+            background: linear-gradient(90deg, #121A12 25%, #1a2a1a 50%, #121A12 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.6s infinite;
+        }
+    </style>
+</head>
+<body class="bg-dark-bg text-mint font-sans antialiased">
+
+    <!-- NAV -->
+    <nav class="px-4 sm:px-6 py-4 bg-card-bg/50 backdrop-blur-md sticky top-0 z-50 border-b border-white/5">
+        <div class="flex items-center gap-3 sm:gap-6 max-w-screen-2xl mx-auto">
+            <h1 class="text-lg sm:text-2xl font-black tracking-tighter text-accent uppercase shrink-0">AnimeTracker</h1>
+            <div class="flex-1 relative">
+                <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Search anime..."
+                    class="w-full bg-dark-bg border border-white/10 rounded-md px-3 sm:px-4 py-2 text-sm text-mint placeholder-mint/30 focus:outline-none focus:border-accent transition-colors duration-200"
+                    autocomplete="off"
+                />
+                <button id="search-clear" class="absolute right-3 top-1/2 -translate-y-1/2 text-mint/30 hover:text-accent hidden text-lg leading-none">✕</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div id="main-content" class="px-4 sm:px-6 lg:px-10 py-8 sm:py-10 space-y-12 sm:space-y-16 max-w-screen-2xl mx-auto">
+        <!-- Skeleton sections -->
+        <div class="space-y-12 sm:space-y-16" id="skeleton-home">
+            <!-- repeat 2 skeleton rows -->
+            <section>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="skeleton h-5 w-40 rounded"></div>
+                    <div class="skeleton h-4 w-16 rounded"></div>
+                </div>
+                <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-6 lg:gap-8">
+                    <!-- 6 skeleton cards -->
+                    <div><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-3/4 mx-auto mt-3 rounded"></div></div>
+                    <div><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-2/3 mx-auto mt-3 rounded"></div></div>
+                    <div><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-3/4 mx-auto mt-3 rounded"></div></div>
+                    <div class="hidden md:block"><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-2/3 mx-auto mt-3 rounded"></div></div>
+                    <div class="hidden lg:block"><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-3/4 mx-auto mt-3 rounded"></div></div>
+                    <div class="hidden lg:block"><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-1/2 mx-auto mt-3 rounded"></div></div>
+                </div>
+            </section>
+            <section>
+                <div class="flex justify-between items-center mb-6">
+                    <div class="skeleton h-5 w-52 rounded"></div>
+                    <div class="skeleton h-4 w-16 rounded"></div>
+                </div>
+                <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-6 lg:gap-8">
+                    <div><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-2/3 mx-auto mt-3 rounded"></div></div>
+                    <div><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-3/4 mx-auto mt-3 rounded"></div></div>
+                    <div><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-1/2 mx-auto mt-3 rounded"></div></div>
+                    <div class="hidden md:block"><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-3/4 mx-auto mt-3 rounded"></div></div>
+                    <div class="hidden lg:block"><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-2/3 mx-auto mt-3 rounded"></div></div>
+                    <div class="hidden lg:block"><div class="skeleton-card rounded-md aspect-[2/3] w-full"></div><div class="skeleton h-3 w-3/4 mx-auto mt-3 rounded"></div></div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- SEARCH RESULTS -->
+    <div id="search-results" class="px-4 sm:px-6 lg:px-10 py-8 max-w-screen-2xl mx-auto hidden">
+        <div class="flex items-center gap-3 mb-8">
+            <span class="w-1 h-6 bg-accent shrink-0"></span>
+            <h2 class="text-lg sm:text-xl font-bold text-mint uppercase tracking-widest">Search Results</h2>
+            <span id="search-count" class="text-xs text-accent/60 font-bold ml-2"></span>
+        </div>
+        <div id="search-grid" class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-6 lg:gap-8"></div>
+        <div id="search-skeleton" class="hidden grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-6 lg:gap-8">
+            <div><div class="skeleton-card rounded-md aspect-[2/3]"></div><div class="skeleton h-3 w-3/4 mx-auto mt-3 rounded"></div></div>
+            <div><div class="skeleton-card rounded-md aspect-[2/3]"></div><div class="skeleton h-3 w-2/3 mx-auto mt-3 rounded"></div></div>
+            <div><div class="skeleton-card rounded-md aspect-[2/3]"></div><div class="skeleton h-3 w-3/4 mx-auto mt-3 rounded"></div></div>
+            <div class="hidden md:block"><div class="skeleton-card rounded-md aspect-[2/3]"></div><div class="skeleton h-3 w-1/2 mx-auto mt-3 rounded"></div></div>
+            <div class="hidden lg:block"><div class="skeleton-card rounded-md aspect-[2/3]"></div><div class="skeleton h-3 w-3/4 mx-auto mt-3 rounded"></div></div>
+            <div class="hidden lg:block"><div class="skeleton-card rounded-md aspect-[2/3]"></div><div class="skeleton h-3 w-2/3 mx-auto mt-3 rounded"></div></div>
+        </div>
+        <div id="search-empty" class="hidden flex flex-col items-center justify-center h-48 text-mint/30">
+            <p class="text-4xl mb-3">🔍</p>
+            <p class="text-sm uppercase tracking-widest">No results found</p>
+        </div>
+    </div>
+
+    <script>
+        const url = 'https://graphql.anilist.co';
+
+        const query = `
+        query {
+          trending: Page(page: 1, perPage: 6) {
+            media(sort: TRENDING_DESC, type: ANIME) { ...fields }
+          }
+          popularSeason: Page(page: 1, perPage: 6) {
+            media(season: SPRING, seasonYear: 2026, sort: POPULARITY_DESC, type: ANIME) { ...fields }
+          }
+          upcoming: Page(page: 1, perPage: 6) {
+            media(status: NOT_YET_RELEASED, sort: POPULARITY_DESC, type: ANIME) { ...fields }
+          }
+          allTime: Page(page: 1, perPage: 6) {
+            media(sort: POPULARITY_DESC, type: ANIME) { ...fields }
+          }
+        }
+        fragment fields on Media {
+            id
+            title { english romaji }
+            coverImage { extraLarge }
+            format
+            averageScore
+        }
+        `;
+
+        const searchQuery = `
+        query ($search: String) {
+          Page(page: 1, perPage: 24) {
+            pageInfo { total }
+            media(search: $search, type: ANIME, sort: POPULARITY_DESC) {
+              id title { english romaji } coverImage { extraLarge } format averageScore
+            }
+          }
+        }`;
+
+        function animeCardHTML(anime) {
+            return `
+                <a href="details.html?id=${anime.id}" class="group block">
+                    <div class="relative overflow-hidden rounded-md shadow-xl bg-card-bg aspect-[2/3]">
+                        <img src="${anime.coverImage.extraLarge}" loading="lazy"
+                            class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 group-hover:opacity-40">
+                        <div class="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 p-2 text-center">
+                            <p class="text-accent font-bold text-base sm:text-lg">${anime.averageScore || '??'}%</p>
+                            <p class="text-[10px] sm:text-xs uppercase tracking-tighter">${anime.format || 'TV'}</p>
+                        </div>
+                    </div>
+                    <p class="mt-2 sm:mt-4 font-medium text-xs sm:text-sm text-center group-hover:text-accent transition-colors duration-300 line-clamp-2">
+                        ${anime.title.english || anime.title.romaji}
+                    </p>
+                </a>`;
+        }
+
+        async function fetchAllCategories() {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query })
+                });
+                const result = await response.json();
+                const data = result.data;
+
+                const main = document.getElementById('main-content');
+                main.innerHTML = '';
+
+                const categories = [
+                    { label: "Trending Now", items: data.trending.media },
+                    { label: "Popular This Season", items: data.popularSeason.media },
+                    { label: "Upcoming Next Season", items: data.upcoming.media },
+                    { label: "All Time Popular", items: data.allTime.media }
+                ];
+
+                const sortMap = {
+                    "Trending Now": "TRENDING_DESC",
+                    "Popular This Season": "POPULARITY_DESC",
+                    "Upcoming Next Season": "POPULARITY_DESC",
+                    "All Time Popular": "POPULARITY_DESC"
+                };
+
+                categories.forEach(cat => {
+                    main.innerHTML += `
+                        <section>
+                            <div class="flex justify-between items-center mb-4 sm:mb-6">
+                                <h2 class="text-sm sm:text-xl font-bold text-mint uppercase tracking-widest flex items-center gap-2 sm:gap-3">
+                                    <span class="w-1 h-5 sm:h-6 bg-accent shrink-0"></span>
+                                    ${cat.label}
+                                </h2>
+                                <a href="list.html?type=${encodeURIComponent(cat.label)}&sort=${sortMap[cat.label]}"
+                                    class="text-[10px] sm:text-xs font-bold text-accent hover:underline uppercase tracking-tighter whitespace-nowrap ml-2">
+                                    See All →
+                                </a>
+                            </div>
+                            <div class="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-6 lg:gap-8">
+                                ${cat.items.map(animeCardHTML).join('')}
+                            </div>
+                        </section>`;
+                });
+            } catch (err) {
+                console.error("Fetch failed", err);
+            }
+        }
+
+        let searchTimeout = null;
+
+        async function performSearch(term) {
+            const searchGrid = document.getElementById('search-grid');
+            const searchSkeleton = document.getElementById('search-skeleton');
+            const searchEmpty = document.getElementById('search-empty');
+            const searchCount = document.getElementById('search-count');
+
+            searchGrid.innerHTML = '';
+            searchEmpty.classList.add('hidden');
+            searchSkeleton.classList.remove('hidden');
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query: searchQuery, variables: { search: term } })
+                });
+                const result = await response.json();
+                const items = result.data.Page.media;
+                const total = result.data.Page.pageInfo.total;
+
+                searchSkeleton.classList.add('hidden');
+
+                if (items.length === 0) {
+                    searchEmpty.classList.remove('hidden');
+                    searchCount.textContent = '';
+                } else {
+                    searchCount.textContent = `${total} result${total !== 1 ? 's' : ''}`;
+                    searchGrid.innerHTML = items.map(animeCardHTML).join('');
+                }
+            } catch (err) {
+                searchSkeleton.classList.add('hidden');
+                searchEmpty.classList.remove('hidden');
+            }
+        }
+
+        function showSearch(term) {
+            document.getElementById('main-content').classList.add('hidden');
+            document.getElementById('search-results').classList.remove('hidden');
+            document.getElementById('search-clear').classList.remove('hidden');
+            performSearch(term);
+        }
+
+        function showHome() {
+            document.getElementById('main-content').classList.remove('hidden');
+            document.getElementById('search-results').classList.add('hidden');
+            document.getElementById('search-clear').classList.add('hidden');
+            document.getElementById('search-input').value = '';
+        }
+
+        document.getElementById('search-input').addEventListener('input', function () {
+            const term = this.value.trim();
+            clearTimeout(searchTimeout);
+            if (term.length === 0) { showHome(); return; }
+            if (term.length < 2) return;
+            searchTimeout = setTimeout(() => showSearch(term), 400);
+        });
+
+        document.getElementById('search-input').addEventListener('keydown', e => {
+            if (e.key === 'Escape') showHome();
+        });
+
+        document.getElementById('search-clear').addEventListener('click', showHome);
+
+        fetchAllCategories();
+    </script>
+</body>
+</html>
