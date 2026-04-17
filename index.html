@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beneficiary Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        input[type="radio"]:checked + div { border-color: #2563eb; background-color: #eff6ff; color: #1e40af; }
+    </style>
+</head>
+<body class="bg-slate-100 min-h-screen p-4 sm:p-6 lg:p-10">
+
+    <div class="max-w-xl mx-auto">
+
+        <form id="masterForm" class="space-y-6">
+            
+            <div id="type_container" class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                <label class="block text-sm font-bold text-slate-700 uppercase tracking-wider mb-4">Beneficiary Type</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <label class="relative cursor-pointer">
+                        <input type="radio" name="beneficiary_type" value="Individual" checked class="sr-only">
+                        <div class="border-2 border-slate-200 bg-slate-50 p-4 rounded-xl text-center transition-all hover:bg-slate-100">
+                            <p class="font-bold text-sm">Individual</p>
+                        </div>
+                    </label>
+                    <label class="relative cursor-pointer">
+                        <input type="radio" name="beneficiary_type" value="SLPA" class="sr-only">
+                        <div class="border-2 border-slate-200 bg-slate-50 p-4 rounded-xl text-center transition-all hover:bg-slate-100">
+                            <p class="font-bold text-sm">SLPA</p>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5">
+                <div class="flex items-center justify-between">
+                    <span class="text-blue-600 font-bold italic">Identity Verification</span>
+                    <button type="button" id="reset_form" class="text-[10px] font-extrabold text-blue-600 uppercase hidden hover:underline">Change Person</button>
+                </div>
+
+                <div>
+                    <label id="name_label" class="block text-xs font-bold text-slate-500 uppercase ml-1">Full Name</label>
+                    <input type="text" id="fname" required placeholder="e.g. Juan D. Dela Cruz" 
+                        class="w-full bg-white border-2 border-slate-500 p-3 rounded-xl mt-1 focus:border-blue-500 outline-none transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase ml-1">Barangay, Municipality</label>
+                    <input type="text" id="location" required placeholder="e.g. San Jose, Milaor"
+                        class="w-full bg-white border-2 border-slate-500 p-3 rounded-xl mt-1 focus:border-blue-500 outline-none transition-all">
+                </div>
+
+                <button type="button" id="verify_btn" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-sm hover:bg-blue-700 transition-all shadow-lg shadow-blue-100">
+                    Verify & Unlock
+                </button>
+                <p id="verify_msg" class="text-center text-[10px] font-bold uppercase tracking-widest hidden"></p>
+
+                <hr class="border-slate-100">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase ml-1">Years Solved</label>
+                        <input type="text" id="years_solved" required placeholder="2024"
+                            class="w-full bg-slate-50 border-2 border-slate-200 p-3 rounded-xl mt-1 outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase ml-1">Category</label>
+                        <select id="food_or_non" class="w-full bg-slate-50 border-2 border-slate-200 p-3 rounded-xl mt-1 outline-none appearance-none">
+                            <option value="Food">🍲 Food</option>
+                            <option value="Non Food">📦 Non-Food</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase ml-1">Goods Provided</label>
+                    <input type="text" id="goods" required placeholder="e.g., Rice, Canned Goods"
+                        class="w-full bg-slate-50 border-2 border-slate-200 p-3 rounded-xl mt-1 outline-none transition-all">
+                </div>
+            </div>
+
+            <div id="sales_section" class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-5 opacity-50 pointer-events-none transition-opacity">
+                <div class="text-emerald-600 font-bold italic">Sales Entry</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase ml-1">Month</label>
+                        <select id="selected_month" required class="w-full bg-slate-50 border-2 border-slate-400 p-3 rounded-xl mt-1 outline-none">
+                            <option value="">Choose...</option>
+                            <option value="March">March</option>
+                            <option value="April">April</option>
+                            <option value="May">May</option>
+                            <option value="June">June</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase ml-1">Total Sales</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 font-bold">₱</span>
+                            <input type="number" id="sales_amount" required placeholder="0.00"
+                                class="w-full bg-slate-50 border-2 border-slate-400 p-3 pl-8 rounded-xl mt-1 outline-none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="submit_btn" disabled class="w-full bg-slate-300 text-white py-4 rounded-2xl font-bold text-lg cursor-not-allowed transition-all">
+                Submit Record
+            </button>
+        </form>
+    </div>
+
+    <div id="successModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div id="modalContent" class="bg-white w-full max-w-sm rounded-3xl p-8 shadow-2xl text-center transform transition-all scale-95 opacity-0 duration-300">
+            <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+            </div>
+            <h3 class="text-2xl font-extrabold text-slate-900 mb-2">Success!</h3>
+            <p class="text-slate-500 mb-8">Record has been synced successfully.</p>
+            <button onclick="location.reload()" class="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold">Continue</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
