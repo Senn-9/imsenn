@@ -83,10 +83,6 @@
 let currentAnimeId = null;
 let currentEpisodeLinks = [];
 
-// CORS proxy to bypass CORS restrictions
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-const API_BASE = 'https://anipub.xyz';
-
 // UTILITIES
 function showError(msg) {
   const errorDiv = document.getElementById("errorMsg");
@@ -110,20 +106,11 @@ async function liveSearch(query) {
 
   try {
     const res = await fetch(
-      `https://anipub.xyz/api/search/${encodeURIComponent(query)}`,
-      { 
-        method: 'GET',
-        headers: { 
-          'Accept': 'application/json',
-          'X-Requested-With': 'XMLHttpRequest'
-        }
-      }
+      `https://anipub.xyz/api/search/${encodeURIComponent(query)}`
     );
 
     if (!res.ok) {
       console.warn("Search status:", res.status);
-      dropdown.innerHTML = '<div class="px-4 py-2 text-gray-400 text-sm text-xs">Tip: Disable live search and use the Search button instead</div>';
-      dropdown.classList.remove("hidden");
       return;
     }
     
@@ -143,7 +130,7 @@ async function liveSearch(query) {
     
     dropdown.classList.remove("hidden");
   } catch (err) {
-    console.warn("Live search not available (CORS)");
+    console.warn("Live search temporarily unavailable");
     // Silently fail - user can use search button instead
   }
 }
@@ -173,28 +160,18 @@ async function searchButton() {
   const btn = document.querySelector('button[onclick="searchButton()"]');
   const originalText = btn.innerText;
   btn.disabled = true;
-  btn.innerText = "Loading...";
+  btn.innerText = "Searching...";
 
   try {
-    // Try with no-cors mode first
     const res = await fetch(
-      `https://anipub.xyz/api/search/${encodeURIComponent(query)}`,
-      { 
-        method: 'GET',
-        mode: 'no-cors'
-      }
-    );
-
-    // no-cors returns opaque response, so we need to try standard fetch
-    const standardRes = await fetch(
       `https://anipub.xyz/api/search/${encodeURIComponent(query)}`
     );
 
-    if (!standardRes.ok) {
-      throw new Error(`API returned ${standardRes.status}`);
+    if (!res.ok) {
+      throw new Error(`API error: ${res.status}`);
     }
     
-    const results = await standardRes.json();
+    const results = await res.json();
 
     if (!results || results.length === 0) {
       showError(`No anime found for "${query}"`);
@@ -211,7 +188,7 @@ async function searchButton() {
     btn.disabled = false;
     btn.innerText = originalText;
     console.error("Search error:", err);
-    showError(`Search failed due to API restrictions. Try opening the page in a different way or use a VPN.`);
+    showError(`Search failed: ${err.message}`);
   }
 }
 
